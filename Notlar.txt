@@ -1,0 +1,29 @@
+--TABLO OLUŞTURMA
+
+create table tblKategori(
+KatId int not null identity primary key,
+KategoriAdi varchar(20) not null,
+Resim varchar(50) not null,
+KategoriDetay varchar(250) not null
+)
+
+--COLON EKLEME
+
+ALTER TABLE tablo_adi ADD sutun1 veri_turu,
+
+--VERİ GİRİŞİ
+
+insert into tblKullanici (KulTurId,Ad,Soyad,Tlf,
+Mail,Adres,Resim) 
+values (3,'Adem','Korkmaz','05322443934',
+'adem@korkmazadem.com','Bandırma','adem.png')
+
+
+/*nokta atışı direkt belli olan kişinin parametresini günceller*/
+update tblKullanici set KulTurId=3 where Kullid=7
+
+/*kullId bilinmiyorsa, ismi belli olan kişi veya kişileri günceller*/
+update tblKullanici set KulTurId=3 where Ad='Enes'
+
+/*belli parametreler göre aranıp bulunan kişinin değerlerini güncelleme*/
+select Ad,Soyad,Tlf from tblKullanici WHERE Ad='Enes'

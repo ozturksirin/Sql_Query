@@ -1,0 +1,403 @@
+use dbDepo
+
+alter table tblUrunler add Stok int not null
+
+select tblUrunler.UrunId, tblUrunler.Adi as 'Ürün Adı',tblUrunler.Resim,tblUrunler.Fiyat,tblUrunler.Detay,tblCins.Adi as 'Ayakkabı Türü' from tblUrunler inner join tblUrunSex on tblUrunler.UrunSexId=tblUrunSex.UrunSexId 
+inner join tblCins on tblUrunler.UrunCinsId=tblCins.CinsId inner join tblKategori 
+on tblCins.KatId=tblKategori.KatId
+where tblUrunSex.Adi='Kadın' and tblKategori.KategoriAdi='Ayakkabı' and tblUrunler.Stok >=100 
+order by tblUrunler.Stok desc
+
+select sum(Miktar) as 'Toplam Ürün Miktarı' from tblIslem where (Tarih between '01.10.2022' and '05.10.2022') 
+and TurId=1 and IslemKulId=15
+
+
+select sum(Miktar) as 'Toplam Ürün Miktarı' from tblIslem 
+inner join tblIslemTur on tblIslem.TurId=tblIslemTur.Turid 
+inner join tblKullanici on tblKullanici.Kullid=tblIslem.IslemKulId
+where (Tarih between '01.10.2022' and '05.10.2022') 
+and tblIslemTur.Ad='Giriş' and tblKullanici.Ad='Oguzhan'
+
+select sum(tblIslem.Miktar) as 'Toplam Ürün Miktarı' from tblIslem 
+inner join tblIslemTur on tblIslem.TurId=tblIslemTur.Turid
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid
+where (Tarih between '01.10.2022' and '05.10.2022') and tblIslemTur.Ad='Giriş' and tblKullanici.Ad='Oguzhan'
+
+use dbDepo
+
+insert into tblKullTur (Ad) values ('Yönetici')
+
+select * from tblKullTur
+
+insert into tblKullanici (KulTurId,Ad,Soyad,Tlf,Mail,Adres,Resim) 
+values (3,'Adem','Korkmaz','05322443934','adem@korkmazadem.com','Bandırma','adem.png')
+insert into tblKullanici (KulTurId,Ad,Soyad,Tlf,Mail,Adres,Resim)
+values(1,'Dilek','Uğuzlu','05366548693','uguzludilek@gmail.com','Kocaeli','Dilek.png')
+
+select * from tblKullanici
+
+select tblKullanici.Kullid, tblKullTur.Ad,tblKullanici.Ad,tblKullanici.Soyad,tblKullanici.Tlf from tblKullanici 
+inner join tblKullTur on tblKullanici.KulTurId=tblKullTur.id where tblKullTur.Ad='Yönetici'
+
+/*nokta atışı direkt belli olan kişinin parametresini günceller*/
+update tblKullanici set KulTurId=3 where Kullid=7
+select * from tblKullanici
+/*kullId bilinmiyorsa, ismi belli olna kişi veya kişileri günceller*/
+
+update tblKullanici set KulTurId=3 where Ad='Enes'
+
+/*belli parametreler göre aranıp bulunan kişinin değerlerini güncelleme*/
+select Ad,Soyad,Tlf from tblKullanici WHERE Ad='Enes'
+
+update tblKullanici set KulTurId=2 where Kullid in 
+(select Kullid from tblKullanici WHERE Ad='Enes')
+
+select * from tblKullanici
+
+/*ürünlere ait cinsiyet kategorilerinin girişi*/
+insert into tblUrunSex (Adi,Detay,Resim) 
+values ('Unisex','Hem kadın hemde erkeklere ait ürünler','unisexurunkategori.jpg')
+
+select * from tblUrunSex
+
+/*işlem türlerinin belirlenmesi*/
+insert into tblIslemTur(Ad,Detay) 
+values ('İmha','Depodaki ürünlerin stoktan çıkışsız düşme işlemi')
+
+select * from tblIslemTur
+
+/*Ürünlere ait kategorilerin tanımlanması*/
+insert into tblKategori (KategoriAdi,Resim,KategoriDetay) 
+values ('Dış Giyim','disgiyim.jpg','Kadın,erkek ve unisex e ait dış giyim türleri')
+
+select * from tblKategori
+
+/*ürünlere ait cins türlerinin belirlenmesi*/
+insert into tblCins (KatId,Adi,Resim,Detay) 
+values (1,'Spor','spor.jpg','Her cinsiyete ait spor ayakkabı türleri')
+
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Bot','bot.jpg','Her cinsiyete ait bot türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Çizme','çizme.jpg','Her cinsiyete ait çizme türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Babet','babet.jpg','Her cinsiyete ait babet türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Topuklu','topuklu.jpg','Her cinsiyete ait topuklu türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Sandalet','sandalet.jpg','Her cinsiyete ait sandalet türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(1,'Terlik','terlik.jpg','Her cinsiyete ait terlik türleri')
+
+select * from tblKategori
+
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'Sweatshirt','Sweatshirt.jpg','Her cinsiyete ait sweatshirt türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'Hoodie','Hoodie.jpg','Her cinsiyete ait hoodie türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'Gömlek','Gömlek.jpg','Her cinsiyete ait gömlek türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'Kazak','Kazak.jpg','Her cinsiyete ait kazak türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'T-shirt','tshirt.jpg','Her cinsiyete ait T-shirt türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values(2,'Crop','crop.jpg','Her cinsiyete ait Crop türleri')
+
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Kot Pantolon','kotpantolon.jpg','her cinsiyete ait kot pantolon türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Kumaş Pantolon','kumaşpantolon.jpg','her cinsiyete ait kot pantolon türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Kot Şort','kotsort.jpg','her cinsiyete ait kot şort türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Tayt','tayt.jpg','her cinsiyete ait tayt türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Deniz Şortu','denizsortu.jpg','her cinsiyete ait deniz şortu türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Kapri','kapri.jpg','her cinsiyete ait kapri türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Kalem Etek','kalemetek.jpg','her cinsiyete ait kalem etek türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Eşofman','esofman.jpg','her cinsiyete ait eşofman türleri')
+insert into tblCins(KatId,Adi,Resim,Detay)
+values(3,'Şalvar','salvar.jpg','her cinsiyete ait şalvar türleri')
+
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Külot','Külot.jpg','Her cinsiyete ait Külot türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'İçlik','İçlik.jpg','Her cinsiyete ait İçlik türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Atlet','Atlet.jpg','Her cinsiyete ait Atlet türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Gecelik','Gecelik.jpg','Her cinsiyete ait Gecelik türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Korse','Korse.jpg','Her cinsiyete ait Korse türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Boxer','Boxer.jpg','Her cinsiyete ait Boxer türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Sütyen','Sütyen.jpg','Kadınlara ait sütyen türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Büstiyer','Büstiyer.jpg','Kadınlara ait büstiyer türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (4,'Fanila','Fanila.jpg','Her cinsiyete ait Fanila türleri')
+
+
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (5,'Kaban','kaban.jpg','her cinsiyete ait kaban türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (5,'Pardösü','pardösü.jpg','her cinsiyete ait pardösü türleri')
+insert into tblCins (KatId,Adi,Resim,Detay)
+values (5,'Ceket','ceket.jpg','her cinsiyete ait ceket türleri')
+
+select * from tblCins
+select * from tblKategori
+select * from tblBeden
+insert into tblBeden (KatId,Olcu) values (2,'XS')
+insert into tblBeden (KatId,Olcu) values (2,'S')
+insert into tblBeden (KatId,Olcu) values (2,'M')
+insert into tblBeden (KatId,Olcu) values (2,'L')
+insert into tblBeden (KatId,Olcu) values (2,'XL')
+insert into tblBeden (KatId,Olcu) values (2,'XXL')
+insert into tblBeden (KatId,Olcu) values (2,'XXXL')
+
+insert into tblBeden (KatId,Olcu) values (3,'XS')
+insert into tblBeden (KatId,Olcu) values (3,'S')
+insert into tblBeden (KatId,Olcu) values (3,'M')
+insert into tblBeden (KatId,Olcu) values (3,'L')
+insert into tblBeden (KatId,Olcu) values (3,'XL')
+insert into tblBeden (KatId,Olcu) values (3,'XXL')
+insert into tblBeden (KatId,Olcu) values (3,'XXXL')
+
+insert into tblBeden (KatId,Olcu) values (4,'XS')
+insert into tblBeden (KatId,Olcu) values (4,'S')
+insert into tblBeden (KatId,Olcu) values (4,'M')
+insert into tblBeden (KatId,Olcu) values (4,'L')
+insert into tblBeden (KatId,Olcu) values (4,'XL')
+insert into tblBeden (KatId,Olcu) values (4,'XXL')
+insert into tblBeden (KatId,Olcu) values (4,'XXXL')
+
+insert into tblBeden (KatId,Olcu) values (5,'XS')
+insert into tblBeden (KatId,Olcu) values (5,'S')
+insert into tblBeden (KatId,Olcu) values (5,'M')
+insert into tblBeden (KatId,Olcu) values (5,'L')
+insert into tblBeden (KatId,Olcu) values (5,'XL')
+insert into tblBeden (KatId,Olcu) values (5,'XXL')
+insert into tblBeden (KatId,Olcu) values (5,'XXXL')
+
+/*ürün tanımlama işlemi*/
+select * from tblUrunSex
+select * from tblCins
+select * from tblBeden
+
+insert into tblUrunler (UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok) values
+(1,11,36,'Vatkalı Yarım Balıkçı Fermuarlı','vatkali.jpg','150','Siyah','Yarım balıkçı, fermuarlı.',0)
+
+use dbDepo
+
+alter table tblUrunler ALTER COLUMN Adi varchar(50) not null
+
+select * from tblBeden
+
+select * from tblUrunler
+delete from tblUrunler where UrunId=13
+
+select * from tblKategori
+
+insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(3,23,21,'külot','külot.jpg','200' ,'beyaz','dantelli',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(3,24,22,'termal içlık','içlik.jpg','100' ,'Siyah','sıcak tutan',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(3,25,25,' pamuklu Atlet','Atlet.jpg','150' ,'beyaz','%pamuk',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,26,23,'Bondi miral','gecelik.png','500' ,'beyaz','satenli',0)
+ 
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,27,34,'korse','korse.jpg','100' ,'Siyah','Bel Ve Göbek Sıkılaştırıcı',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(2,28,34,'boxer','boxer.jpg','50' ,'Siyah','kalvin klein boxer',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,29,34,'sutyen','sutyen.jpg','90','kırmızı','dantelli',0)
+
+  insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,30,34,'bustier','bustier.jpg','90','siyah','Cop Top Büstiyer',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,31,34,'fanila','fanila.jpg','100','siyah',' %100 Pamuk İp ',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,32,34,'kaban','kaban.jpg','100','siyah',' %Içi Astarlı Uzun Kaşe Kaban ',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(1,33,34,'pardosu','pardosu.jpg','350','siyah',' %100 Pamuk İp ',0)
+
+ insert into tblUrunler(UrunSexId,UrunCinsId,UrunBedenId,Adi,Resim,Fiyat,Renk,Detay,Stok)
+ values(3,34,34,'ceket','ceket.jpg','100','beyaz',' su gecirmez ',0)
+
+select * from tblUrunler
+--Depodaki ürünlerin fiyat ortalamasını veren sorguyu yazınız?
+select avg(Fiyat) as ortalama from tblUrunler
+
+--Depodaki ürünlerin fiyat ortalamasını veren sorguyu AVG parameeresi kullanmadan yazınız?
+select sum(Fiyat) as toplam from tblUrunler 
+select count(*) as UrunSayisi from tblUrunler
+
+select (sum(Fiyat))/(count(*)) as OrtalamaFiyat from tblUrunler 
+
+--Enyüksek Fiyat ile en düşük fiyatın toplamını toplam ürün sayısına bölen sorguyu yazınız
+select MAX(Fiyat) from tblUrunler --en yüksek ürün fiyat
+select MIN(Fiyat) from tblUrunler  -- en düşük ürün fiyat
+select MAX(Fiyat)+MIN(Fiyat) from tblUrunler --en yüksek ürün ile enb düşük ürün fiyatnın toplamı
+select (MAX(Fiyat)+MIN(Fiyat))/COUNT(*) from tblUrunler
+
+--fiyat ortalaması için
+select (MAX(Fiyat)+MIN(Fiyat))/2 from tblUrunler
+select * from tblUrunler
+
+--en yüksek fiyatlı ürün/ürünler bulunduğu kategorinin adını listeleyen sorguyu yazınız?
+select max(Fiyat) from tblUrunler 
+select KategoriAdi from tblKategori
+
+select KategoriAdi,tblUrunler.Adi,tblUrunler.Fiyat from tblUrunler 
+inner join tblCins on tblUrunler.UrunCinsId=tblCins.CinsId
+inner join tblKategori on tblKategori.KatId=tblCins.KatId
+where Fiyat in (select max(Fiyat) from tblUrunler )
+
+--26.10.2022 tarihli çalışmalar
+use dbDepo
+
+select * from tblUrunler
+select * from tblKullTur
+select * from tblKullanici
+-- hangi cins türünde kaç tane ürün olduğunu listeleyen sorguyu yazınız?
+select tblCins.Adi,COUNT(*) from tblUrunler 
+inner join tblCins on tblUrunler.UrunCinsId=tblCins.CinsId
+group by tblCins.Adi
+
+--kategorilerde kaç çeşit ürün oldğunu listeyen sorguyu yazınız?
+
+select tblKategori.KategoriAdi,COUNT(*) from tblKategori
+inner join tblCins on tblKategori.KatId=tblCins.KatId
+inner join tblUrunler on tblUrunler.UrunCinsId=tblCins.CinsId
+group by tblKategori.KategoriAdi
+
+select * from tblKategori
+inner join tblCins on tblKategori.KatId=tblCins.KatId
+inner join tblUrunler on tblUrunler.UrunCinsId=tblCins.CinsId
+--group by tblKategori.KategoriAdi
+select tblKategori.KategoriAdi,COUNT(*) from tblKategori
+inner join tblCins on tblKategori.KatId=tblCins.KatId
+group by tblKategori.KategoriAdi
+
+
+ select*from tblIslemTur
+  select*from tblIslem
+  select * from tblKullanici inner join tblKullTur on tblKullTur.id=tblKullanici.KulTurId
+  '10/26/2022'
+
+  insert into tblIslem(TurId,PersonelKulId,IslemKulId,Tarih,Miktar,UrunId) values 
+  (1,4,2,'10/13/2022',3,12)
+  insert into tblIslem(TurId,PersonelKulId,IslemKulId,Tarih,Miktar,UrunId) values
+(1,4,8,'11/11/2022',3,10)
+   select * from tblIslem
+   INSERT INTO tblIslem (TurId,PersonelKulId,IslemKulId,Tarih,Miktar,UrunId)
+VALUES (2,4,6,'10/26/2022',3,11)
+
+insert into tblIslem(TurId,PersonelKulId,IslemKulId,Tarih,Miktar,UrunId) values
+(2,4,4,'12/12/2022',101,24)
+
+SELECT * FROM tblUrunler
+select * from tblIslem inner join tblIslemTur on tblIslemTur.Turid=tblIslem.TurId
+insert into tblIslem(TurId,PersonelKulId,IslemKulId,Tarih,Miktar,UrunId) values (1,11,2,'09/10/2023',50,120)
+
+--02.11.2022 tarihli işlemler
+use dbDepo
+
+select tblKullanici.Ad,tblKullanici.Soyad,tblKullTur.Ad,tblIslem.Tarih,
+tblIslem.Miktar,tblIslem.UrunId,tblUrunler.Adi from tblIslem 
+inner join tblKullanici on tblIslem.PersonelKulId = tblKullanici.Kullid
+inner join tblKullTur on tblKullTur.id = tblKullanici.KulTurId
+inner join tblUrunler on tblUrunler.UrunId = tblIslem.UrunId
+
+select * from tblIslemTur
+
+
+UPDATE tblUrunler as urun,
+      (select UrunId,Miktar from tblIslem where TurId=1) AS T2 
+  SET urun.Stok=urun.Stok + T2.Miktar
+WHERE urun.UrunId = T2.UrunId;
+
+--tekli güncelleme
+UPDATE tblUrunler SET Stok =  (SELECT Miktar FROM tblIslem WHERE TurId = 1 and UrunId=2) WHERE tblUrunler.UrunId = 2
+
+--- çoklu güncelleme
+update tblUrunler set Stok=Stok+{1} where UrunId={0} (select UrunId,Miktar from tblIslem where TurId=1 )
+
+UPDATE tblUrunler SET Stok = Stok + (SELECT Miktar FROM tblIslem WHERE TurId = 1) 
+WHERE tblUrunler.UrunId = (SELECT UrunId FROM tblIslem WHERE TurId = 1)
+
+
+select UrunId,COUNT(*) from tblIslem group by UrunId
+ 
+ select * from tblUrunler order by Stok desc
+ 
+ -- giriş işlemi yapan müşterilerim bilgileri 
+select * from tblKullanici where Kullid in (select IslemKulId from tblIslem where TurId=1)
+insert into tblKullanici(KulTurId,Ad,Soyad,Tlf,Mail,Adres,Resim) values (1,'Furkan','Çamyar','05236547896','furkan@gmail.com','Ordu/Ünye','furkan.jpg')
+
+select * from tblKullanici where 
+exists (select * from tblIslem where TurId=1 and tblKullanici.Kullid=tblIslem.IslemKulId)
+
+-- işlem yapmayan kişiler
+select * from tblKullanici where 
+not exists (select * from tblIslem where TurId=1 and tblKullanici.Kullid=tblIslem.IslemKulId)
+
+--09.11.2022 tarihli işlemler
+
+use dbDepo
+-- en fazla ürün grişi gerçekleştirren kişi yi bulan sorguyu yazınız?
+select * from tblIslemTur
+
+select * from tblIslem 
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid  where tblIslem.TurId=1
+
+select SUM(Miktar) as toplamUrun from tblIslem 
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid 
+
+select SUM(Miktar) as ToplamGiris from tblIslem 
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid where tblIslem.TurId=1
+
+select SUM(Miktar) as toplamCikis from tblIslem 
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid where tblIslem.TurId=2
+
+select SUM(Miktar) as toplamUrun from tblIslem 
+
+select SUM(Miktar) as ToplamGiris from tblIslem 
+where TurId=1
+
+select IslemKulId, SUM(Miktar) as toplamCikis from tblIslem 
+id where TurId=2 group by IslemKulId
+
+select IslemKulId, COUNT(*) as toplamCikis from tblIslem 
+id where TurId=2 group by IslemKulId
+
+select top 1 IslemKulId, tblKullanici.Ad, SUM(Miktar) as toplamGiris from tblIslem 
+inner join tblKullanici on tblIslem.IslemKulId=tblKullanici.Kullid 
+where TurId in (select Turid from tblIslemTur where Ad='Giriş') group by IslemKulId, tblKullanici.Ad order by toplamGiris desc
+
+select * from tblUrunler 
+inner join tblBeden on tblUrunler.UrunBedenId=tblBeden.Id
+inner join tblUrunSex on tblUrunler.UrunSexId=tblUrunSex.UrunSexId
+where tblUrunler.UrunCinsId=1 and tblUrunSex.UrunSexId=1 and
+tblBeden.Olcu between 35 and 37
+
+update tblUrunler set UrunBedenId=21 where UrunId=2
+update tblUrunler set UrunBedenId=13 where UrunId=44
+
+select * from tblUrunSex
